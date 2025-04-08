@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: threadvine
+    version: 1.0.0
+
+  datasource:
+    username: threadvine_owner
+    url: jdbc:postgresql://ep-misty-surf-a5d8vswa-pooler.us-east-2.aws.neon.tech/threadvine?sslmode=require
+    password: npg_9CZndER3lVqx
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+server:
+  port: '9090'
+jwt:
+  secret: secret-key-to-change-in-prod-env-only-please-change-me
