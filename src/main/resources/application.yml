@@ -19,3 +19,4 @@ server:
   port: '9090'
 jwt:
   secret: secret-key-to-change-in-prod-env-only-please-change-me
+  expiration: 3600000
