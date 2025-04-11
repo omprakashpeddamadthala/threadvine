@@ -1,6 +1,5 @@
 package com.threadvine.service.impl;
 
-import com.threadvine.model.CustomUserDetail;
 import com.threadvine.model.User;
 import com.threadvine.repositories.UserRepository;
 import com.threadvine.service.AuthenticationService;
@@ -35,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).orElseThrow(
                 () -> new UsernameNotFoundException("User with email " + username + " not found"));
-        return new CustomUserDetail(user) ;
+        return user;
     }
 
     @Override
@@ -69,8 +68,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return Jwts.builder()
                 .setClaims( claims )
                 .setSubject( username )
-                .setIssuedAt(new Date( System.currentTimeMillis() ))
-                .setExpiration( new Date( System.currentTimeMillis() + expiration ))
+                .setIssuedAt( new Date( System.currentTimeMillis() ) )
+                .setExpiration( new Date( System.currentTimeMillis() + 86400000L ) )
                 .signWith( SignatureAlgorithm.HS256, secretKey )
                 .compact();
     }

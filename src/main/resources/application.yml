@@ -4,9 +4,9 @@ spring:
     version: 1.0.0
 
   datasource:
-    username: threadvine_owner
-    url: jdbc:postgresql://ep-misty-surf-a5d8vswa-pooler.us-east-2.aws.neon.tech/threadvine?sslmode=require
-    password: npg_9CZndER3lVqx
+    username: ${DB_USER_NAME}
+    url: ${DB_URL}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -18,5 +18,5 @@ spring:
 server:
   port: '9090'
 jwt:
-  secret: secret-key-to-change-in-prod-env-only-please-change-me
-  expiration: 3600000
+  secret: secret123345456ioedhfoshdfowisfosidfioshdfiushdfiusdjufhsdihfisduhfiusdhfuihsdifuhsidhfisudhfish
+  expiration: 86400000L
