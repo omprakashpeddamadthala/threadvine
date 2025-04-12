@@ -44,9 +44,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
+    public ResponseEntity<String> register(@Valid @RequestBody User user) {
         log.info("Received registration request for user: {}", user.getEmail());
-        return ResponseEntity.ok( userService.registerUser( user ) );
+        User registeredUser = userService.registerUser( user );
+        return ResponseEntity.ok("User registered successfully with email: " + registeredUser.getEmail() );
     }
 
     @PostMapping("/change-password")
