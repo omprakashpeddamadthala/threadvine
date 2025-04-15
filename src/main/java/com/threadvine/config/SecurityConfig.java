@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requestsConfigurer -> requestsConfigurer
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
-                        .requestMatchers( HttpMethod.GET,"/api/products/**").permitAll()
+                        .requestMatchers( HttpMethod.GET,"/api/v1/products/**").permitAll()
                         .requestMatchers( "/api/v1/auth/change-password" ).authenticated()
                         .anyRequest().authenticated()
                  )

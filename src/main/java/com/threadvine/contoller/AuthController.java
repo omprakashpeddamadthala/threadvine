@@ -32,7 +32,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         log.info( "Logging in user: {}", loginRequest.getEmail() );
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken( loginRequest.getEmail(), loginRequest.getPassword() ) );
@@ -58,4 +58,5 @@ public class AuthController {
         userService.changePassword( email, request );
         return ResponseEntity.ok().body( "Password changed" );
     }
+
 }
