@@ -11,14 +11,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    public static final String PRODUCT_IMAGE_PATH = "src/main/resources/static/Images/";
+    public static final String PRODUCT_IMAGE_PATH = "src/main/resources/static/images/";
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
@@ -89,13 +95,14 @@ public class ProductServiceImpl implements ProductService {
                 .stream().map(productMapper::toProductListDTO).toList();
     }
 
-    private String saveProductImage(MultipartFile file) {
-        log.info( "Saving product image to server file name: {}", file.getOriginalFilename());
-        String fileName = file.getOriginalFilename();
+    private String saveProductImage(MultipartFile image){
+        String fileName = UUID.randomUUID().toString()+"_"+image.getOriginalFilename();
+        Path path = Paths.get(PRODUCT_IMAGE_PATH + fileName);
         try {
-            file.transferTo( new java.io.File( PRODUCT_IMAGE_PATH + fileName ) );
-        } catch (Exception e) {
-            throw new RuntimeException( "Error saving product image", e );
+            Files.createDirectories(path.getParent());
+            Files.write(path, image.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException( e );
         }
         return fileName;
     }
