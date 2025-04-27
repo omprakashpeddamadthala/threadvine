@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class ProductDTO {
 
-    private Long id;
+    private UUID id;
     @NotBlank(message = "Product name is required")
     private String name;
     @NotBlank(message = "Product description is required")

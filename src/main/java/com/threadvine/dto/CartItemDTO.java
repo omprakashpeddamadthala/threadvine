@@ -6,15 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class CartItemDTO {
 
-    private Long id;
-    private Long cartId;
-    private Long productId;
+    private UUID id;
+    private UUID cartId;
+    private UUID productId;
     @Positive(message = "Cannot be negative")
     private Integer quantity;
 

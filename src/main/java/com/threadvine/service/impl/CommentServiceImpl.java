@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfig
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
-    public CommentDTO addComment(Long productId, Long userid ,CommentDTO commentDTO) {
+    public CommentDTO addComment(UUID productId, UUID userid , CommentDTO commentDTO) {
         log.info( "Adding comment to product and userid: {}", productId, userid );
 
         Product product = productRepository.findById( productId )
@@ -45,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto( savedComment );
     }
 
-    public List<CommentDTO> getCommentsByProductId(Long productId) {
+    public List<CommentDTO> getCommentsByProductId(UUID productId) {
         log.info( "Getting comment by product id: {}", productId );
         List<Comment> comment = commentRepository.findByProductId( productId );
         return comment.stream()

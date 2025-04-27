@@ -7,11 +7,12 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class ProductListDTO {
 
-    private Long id;
+    private UUID id;
     @NotBlank(message = "Product name is required")
     private String name;
     @NotBlank(message = "Product description is required")

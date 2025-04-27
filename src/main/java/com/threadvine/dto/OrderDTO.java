@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OrderDTO {
-    private Long id;
-    private Long userId;
+    private UUID id;
+    private UUID userId;
     @NotBlank(message = "Address  is required")
     private String address;
     @NotBlank(message = "Phone number is required")

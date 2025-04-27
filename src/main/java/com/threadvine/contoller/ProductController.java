@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -34,7 +35,7 @@ public class ProductController {
 
     @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id,
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id,
                                                     @RequestPart("product") @Valid ProductDTO productDTO,
                                                     @RequestPart(value = "image", required = false) MultipartFile image) {
         log.info( "Received product update request for product: {}", productDTO.getName());
@@ -44,14 +45,14 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable UUID id) {
         log.info( "Received product delete request for product: {}", id);
         ProductDTO deletedProduct = productService.deleteProduct( id );
         return new ResponseEntity<>( deletedProduct,HttpStatus.NO_CONTENT);
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity<ProductListDTO> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductListDTO> getProductById(@PathVariable UUID id) {
         log.info( "Received product get request for product: {}", id);
         ProductListDTO product = productService.getProductById( id );
         return new ResponseEntity<>( product,HttpStatus.OK);
