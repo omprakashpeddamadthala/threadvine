@@ -14,11 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(name = "orders")
-public class Order {
+public class Order  extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
     private User user;

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -14,9 +15,9 @@ import java.math.BigDecimal;
 @Builder
 public class OrderItemDTO {
 
-    private Long id;
-    private Long orderId;
-    private Long productId;
+    private UUID id;
+    private UUID orderId;
+    private UUID productId;
     @Positive(message = "Cannot be negative")
     private Integer quantity;
     @Positive(message = "Cannot be negative")

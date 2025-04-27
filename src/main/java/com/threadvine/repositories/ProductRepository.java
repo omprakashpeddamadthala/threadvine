@@ -3,6 +3,8 @@ package com.threadvine.repositories;
 import com.threadvine.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends JpaRepository<Product,Long> {
+import java.io.Serializable;
+
+public interface ProductRepository extends JpaRepository<Product, Serializable> {
     boolean existsByName(String name);
 }

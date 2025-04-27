@@ -5,15 +5,16 @@ import com.threadvine.dto.ProductListDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
     ProductDTO createProduct(ProductDTO productDTO, MultipartFile file);
 
-    ProductDTO updateProduct(ProductDTO productDTO, MultipartFile file, Long productId);
+    ProductDTO updateProduct(ProductDTO productDTO, MultipartFile file, UUID productId);
 
-    ProductDTO deleteProduct(Long id);
+    ProductDTO deleteProduct(UUID id);
 
-    ProductListDTO getProductById(Long id);
+    ProductListDTO getProductById(UUID id);
 
     List<ProductListDTO> getAllProducts();
 }

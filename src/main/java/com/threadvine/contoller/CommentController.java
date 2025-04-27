@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/comments")
@@ -25,17 +26,17 @@ public class CommentController {
 
     @PostMapping("/product/{productId}")
     @PreAuthorize( "isAuthenticated()" )
-    public ResponseEntity<CommentDTO> addComment(@PathVariable Long productId,
+    public ResponseEntity<CommentDTO> addComment(@PathVariable UUID productId,
                                                 @AuthenticationPrincipal UserDetails userDetails,
                                                 @Valid @RequestBody CommentDTO commentDTO) {
         log.info( "Received comment add request for product: {}", productId );
-        Long userid = ((User) userDetails).getId();
+        UUID userid = ((User) userDetails).getId();
         CommentDTO comment = commentService.addComment( productId, userid, commentDTO );
         return new ResponseEntity<>( comment, HttpStatus.CREATED );
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<CommentDTO>> getCommentsByProductId(@PathVariable Long productId) {
+    public ResponseEntity<List<CommentDTO>> getCommentsByProductId(@PathVariable UUID productId) {
         log.info( "Received comment get request for product: {}", productId );
         List<CommentDTO> comments = commentService.getCommentsByProductId( productId );
         return new ResponseEntity<>( comments, HttpStatus.OK );

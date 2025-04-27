@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTO productDTO, MultipartFile file, Long productId) {
+    public ProductDTO updateProduct(ProductDTO productDTO, MultipartFile file, UUID productId) {
         log.info( "Updating product: {}", productDTO.getName() );
 
         Product product = productRepository.findById( productId )
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO deleteProduct(Long id) {
+    public ProductDTO deleteProduct(UUID id) {
         log.info( "Deleting product with id: {}", id );
         Product product = productRepository.findById( id )
                 .orElseThrow( () -> new RuntimeException( "Product not found with id: " + id)  );
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductListDTO getProductById(Long id) {
+    public ProductListDTO getProductById(UUID id) {
         log.info( "Getting product with id: {}", id );
         Product product = productRepository.findById( id )
                 .orElseThrow( () -> new RuntimeException( "Product not found with id: " + id)  );
