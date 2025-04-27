@@ -1,5 +1,6 @@
 package com.threadvine.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -19,5 +20,6 @@ public class ProductListDTO {
     private BigDecimal price;
     @PositiveOrZero(message = "Cannot be negative or zero")
     private Integer quantity;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String imageUrl;
 }
