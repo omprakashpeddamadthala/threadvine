@@ -1,6 +1,7 @@
 package com.threadvine.contoller;
 
 import com.threadvine.dto.ApiErrorResponse;
+import com.threadvine.exceptions.InsufficientQuantityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,16 @@ public class ErrorController {
                 .message(e.getMessage())
                 .build();
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InsufficientQuantityException.class)
+    public ResponseEntity<ApiErrorResponse> handleBadCredentialsException(InsufficientQuantityException e) {
+        log.error( "InsufficientQuantityException occurred", e );
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .status( HttpStatus.BAD_REQUEST.value() )
+                .message( e.getMessage() )
+                .build();
+        return new ResponseEntity<>( error, HttpStatus.BAD_REQUEST );
     }
 
     @ExceptionHandler(BadCredentialsException.class)
