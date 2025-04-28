@@ -15,7 +15,6 @@ import java.util.UUID;
 public class CartItemDTO {
 
     private UUID id;
-    private UUID cartId;
     private UUID productId;
     @Positive(message = "Cannot be negative")
     private Integer quantity;
