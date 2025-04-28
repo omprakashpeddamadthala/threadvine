@@ -25,7 +25,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','SELLER')")
     public ResponseEntity<ProductDTO> createProduct(@RequestPart("product")  @Valid   ProductDTO productDTO,
                                                     @RequestPart(value = "image", required = false ) MultipartFile file) {
         log.info( "Received product creation request for product: {}", productDTO.getName());
@@ -34,7 +34,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','SELLER')")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id,
                                                     @RequestPart("product") @Valid ProductDTO productDTO,
                                                     @RequestPart(value = "image", required = false) MultipartFile image) {
@@ -44,7 +44,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN','SELLER')")
     public ResponseEntity<ProductDTO> deleteProduct(@PathVariable UUID id) {
         log.info( "Received product delete request for product: {}", id);
         ProductDTO deletedProduct = productService.deleteProduct( id );

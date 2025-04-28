@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +27,10 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail( user.getEmail() ).isPresent()){
             throw new IllegalArgumentException("User already exists with email: " + user.getEmail());
         }
+
+        // Default to a valid role
+        if (!isValidRole(user.getRole().name())) user.setRole( User.Role.USER);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -44,6 +50,10 @@ public class UserServiceImpl implements UserService {
         log.info( "Getting user by email: {}", email );
         return userRepository.findByEmail( email )
                 .orElseThrow(()->new UserNotFoundException("User not found with email: " + email));
+    }
+
+    private boolean isValidRole(String role) {
+        return Arrays.asList("USER", "ADMIN", "SELLER","BUYER", "SALES_REP").contains(role);
     }
 
 }

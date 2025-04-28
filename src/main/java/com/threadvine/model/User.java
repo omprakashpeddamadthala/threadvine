@@ -63,6 +63,9 @@ public class User  extends BaseEntity implements UserDetails {
 
     public enum Role {
         USER,
-        ADMIN
+        ADMIN,
+        SELLER,
+        BUYER,
+        SALES_REP
     }
 }
