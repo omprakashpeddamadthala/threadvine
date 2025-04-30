@@ -1,6 +1,7 @@
 package com.threadvine.service.impl;
 
 import com.threadvine.dto.CommentDTO;
+import com.threadvine.exceptions.ProductNotFoundException;
 import com.threadvine.mappers.CommentMapper;
 import com.threadvine.model.Comment;
 import com.threadvine.model.Product;
@@ -31,8 +32,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDTO addComment(UUID productId, UUID userid , CommentDTO commentDTO) {
         log.info( "Adding comment to product and userid: {}", productId, userid );
 
-        Product product = productRepository.findById( productId )
-                .orElseThrow( () -> new RuntimeException( "Product not found with id: " + productId)  );
+        Product product = this.getProductByProductId( productId );
 
         User user = userRepository.findById( userid )
                 .orElseThrow( () -> new RuntimeException( "User not found with id: " + userid)  );
@@ -52,6 +52,11 @@ public class CommentServiceImpl implements CommentService {
         return comment.stream()
                 .map( commentMapper::toDto )
                 .collect( Collectors.toList() );
+    }
+
+    private Product getProductByProductId(UUID productId) {
+        return productRepository.findById( productId )
+                .orElseThrow( () -> new ProductNotFoundException( "Product not found with id: " + productId ) );
     }
 
 

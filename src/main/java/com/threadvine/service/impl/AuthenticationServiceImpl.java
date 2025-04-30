@@ -3,6 +3,7 @@ package com.threadvine.service.impl;
 import com.threadvine.model.User;
 import com.threadvine.repositories.UserRepository;
 import com.threadvine.service.AuthenticationService;
+import com.threadvine.service.TokenBlackListService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,6 +31,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
 
+    private final TokenBlackListService tokenBlackListService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).orElseThrow(
@@ -48,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public Boolean validateToken(String token, UserDetails userDetails) {
         log.info( "Validating JWT token for user: {}", userDetails.getUsername() );
         final String username = this.extractUsername(token);
-        return ( username.equals( userDetails.getUsername() ) && !this.isTokenExpired(token) );
+        return ( username.equals( userDetails.getUsername() ) && !this.isTokenExpired(token) &&  !tokenBlackListService.isTokenIsBlockListed(token));
     }
 
 
