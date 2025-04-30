@@ -2,6 +2,7 @@ package com.threadvine.service.impl;
 
 import com.threadvine.dto.ProductDTO;
 import com.threadvine.dto.ProductListDTO;
+import com.threadvine.exceptions.ProductNotFoundException;
 import com.threadvine.mappers.ProductMapper;
 import com.threadvine.model.Product;
 import com.threadvine.repositories.ProductRepository;
@@ -52,8 +53,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(ProductDTO productDTO, MultipartFile file, UUID productId) {
         log.info( "Updating product: {}", productDTO.getName() );
 
-        Product product = productRepository.findById( productId )
-                .orElseThrow( () -> new RuntimeException( "Product not found with id: " + productId)  );
+        Product product = this.getProductByProductId( productId );
 
         product.setName( productDTO.getName() );
         product.setDescription( productDTO.getDescription() );
@@ -74,18 +74,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO deleteProduct(UUID id) {
         log.info( "Deleting product with id: {}", id );
-        Product product = productRepository.findById( id )
-                .orElseThrow( () -> new RuntimeException( "Product not found with id: " + id)  );
+        Product product = this.getProductByProductId( id );
         productRepository.delete( product );
         return null;
     }
 
     @Override
-    public ProductListDTO getProductById(UUID id) {
+    public ProductDTO getProductById(UUID id) {
         log.info( "Getting product with id: {}", id );
-        Product product = productRepository.findById( id )
-                .orElseThrow( () -> new RuntimeException( "Product not found with id: " + id)  );
-        return productMapper.toProductListDTO( product );
+        Product product = this.getProductByProductId( id );
+        return productMapper.toDto( product );
     }
 
     @Override
@@ -93,6 +91,11 @@ public class ProductServiceImpl implements ProductService {
         log.info( "Getting all products" );
         return  productRepository.findAll()
                 .stream().map(productMapper::toProductListDTO).toList();
+    }
+
+    private Product getProductByProductId(UUID productId) {
+        return productRepository.findById( productId )
+                .orElseThrow( () -> new ProductNotFoundException( "Product not found with id: " + productId ) );
     }
 
     private String saveProductImage(MultipartFile image){

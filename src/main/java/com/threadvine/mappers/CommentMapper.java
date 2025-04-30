@@ -12,7 +12,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    @Mapping( target = "userId" ,source = "user.id")
+    @Mapping(target = "userId", source = "comment", qualifiedByName = "mapUserToUserId")
     CommentDTO toDto(Comment comment);
 
     @Mapping( target = "user" ,source = "userId", qualifiedByName = "mapUserIdToUser")
@@ -25,5 +25,10 @@ public interface CommentMapper {
         User user = new User();
         user.setId(userId);
         return user;
+    }
+
+    @Named("mapUserToUserId")
+    default UUID mapUserToUserId(Comment comment) {
+        return comment.getUser() != null ? comment.getUser().getId() : null;
     }
 }

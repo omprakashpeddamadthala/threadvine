@@ -52,9 +52,9 @@ public class ProductController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity<ProductListDTO> getProductById(@PathVariable UUID id) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
         log.info( "Received product get request for product: {}", id);
-        ProductListDTO product = productService.getProductById( id );
+        ProductDTO product = productService.getProductById( id );
         return new ResponseEntity<>( product,HttpStatus.OK);
     }
 

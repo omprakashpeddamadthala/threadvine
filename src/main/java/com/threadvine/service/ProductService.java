@@ -14,7 +14,7 @@ public interface ProductService {
 
     ProductDTO deleteProduct(UUID id);
 
-    ProductListDTO getProductById(UUID id);
+    ProductDTO getProductById(UUID id);
 
     List<ProductListDTO> getAllProducts();
 }

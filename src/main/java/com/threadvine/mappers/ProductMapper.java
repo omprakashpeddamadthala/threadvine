@@ -6,7 +6,7 @@ import com.threadvine.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {CommentMapper.class})
 public interface ProductMapper {
 
     ProductDTO toDto(Product product);
