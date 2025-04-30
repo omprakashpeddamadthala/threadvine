@@ -1,7 +1,10 @@
 package com.threadvine.service.impl;
 
 import com.threadvine.dto.CartDTO;
+import com.threadvine.exceptions.CartNotFoundException;
 import com.threadvine.exceptions.InsufficientQuantityException;
+import com.threadvine.exceptions.ProductNotFoundException;
+import com.threadvine.exceptions.UserNotFoundException;
 import com.threadvine.mappers.CartMapper;
 import com.threadvine.model.Cart;
 import com.threadvine.model.CartItem;
@@ -34,11 +37,9 @@ public class CartServiceImpl implements CartService {
     public CartDTO addToCart(UUID userId, UUID productId, Integer quantity) {
         log.info( "Adding product to cart with userId: {}, productId: {}, quantity: {}", userId, productId, quantity );
 
-        Product product = productRepository.findById( productId )
-                .orElseThrow( () -> new RuntimeException( "Product not found with id: " + productId ) );
+        Product product = this.getProductByProductId( productId );
 
-        User user = userRepository.findById( userId )
-                .orElseThrow( () -> new RuntimeException( "User not found with id: " + userId ) );
+        User user = this.getUserByUserId( userId );
 
         if (product.getQuantity() < quantity) {
             throw new InsufficientQuantityException( "Only " + product.getQuantity() + " available quantity" );
@@ -70,8 +71,7 @@ public class CartServiceImpl implements CartService {
     public CartDTO getCartByUserId(UUID userId) {
         log.info( "Getting cart by userId: {}", userId );
 
-        Cart cart = cartRepository.findByUserId( userId )
-                .orElseThrow( () -> new RuntimeException( "Cart not found with id: " + userId ) );
+        Cart cart = this.getCartByCartId( userId );
         return cartMapper.toDto( cart );
     }
 
@@ -79,9 +79,24 @@ public class CartServiceImpl implements CartService {
     public void clearCart(UUID userId) {
         log.info( "Clearing cart by userId: {}", userId );
 
-        Cart cart = cartRepository.findByUserId( userId )
-                .orElseThrow( () -> new RuntimeException( "Cart not found with id: " + userId ) );
+        Cart cart = this.getCartByCartId( userId );
         cart.getItems().clear();
         cartRepository.save( cart );
     }
+
+    private Product getProductByProductId(UUID productId) {
+        return productRepository.findById( productId )
+                .orElseThrow( () -> new ProductNotFoundException("Product not found with id: " + productId ) );
+    }
+
+    private Cart getCartByCartId(UUID userId) {
+        return cartRepository.findByUserId( userId )
+                .orElseThrow( () -> new CartNotFoundException("Cart not found with id: " + userId ) );
+    }
+
+    private User getUserByUserId(UUID userId) {
+        return userRepository.findById( userId )
+                .orElseThrow( () -> new UserNotFoundException("User not found with id: " + userId ) );
+    }
+
 }
