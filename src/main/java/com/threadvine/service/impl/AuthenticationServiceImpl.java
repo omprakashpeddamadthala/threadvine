@@ -51,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public Boolean validateToken(String token, UserDetails userDetails) {
         log.info( "Validating JWT token for user: {}", userDetails.getUsername() );
         final String username = this.extractUsername(token);
-        return ( username.equals( userDetails.getUsername() ) && !this.isTokenExpired(token) &&  !tokenBlackListService.isTokenIsBlockListed(token));
+        return ( username.equals( userDetails.getUsername() ) && !this.isTokenExpired(token) && !tokenBlackListService.isTokenIsBlockListed(token));
     }
 
 
