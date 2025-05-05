@@ -62,13 +62,48 @@ public class AuthController {
     }
 
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/logout")
-    public void logout(HttpServletRequest httpServletRequest){
+    public ResponseEntity<String> logout(HttpServletRequest httpServletRequest){
         log.info( "Received logout request  ");
         String token = extractTokenFromRequest(httpServletRequest);
-        if(!StringUtils.isEmpty( token )) {
-            tokenBlackListService.addTokenToBlackList( token );
+        if(StringUtils.hasText(token)) {
+            tokenBlackListService.addTokenToBlackList(token);
+            return ResponseEntity.ok("Logged out successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No valid token provided");
+        }
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest httpServletRequest) {
+        log.info("Received refresh token request");
+        String token = extractTokenFromRequest(httpServletRequest);
+
+        if (StringUtils.isEmpty(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            String username = authenticationService.extractUsername(token);
+            UserDetails userDetails = userService.getUserByEmail(username);
+
+            if (authenticationService.validateToken(token, userDetails)) {
+                // Generate a new token
+                final String newToken = authenticationService.generateToken(userDetails);
+
+                // Blacklist the old token
+                tokenBlackListService.addTokenToBlackList(token);
+
+                return ResponseEntity.ok(AuthResponse.builder()
+                        .email(username)
+                        .jwtToken(newToken)
+                        .build());
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            log.error("Error refreshing token", e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
