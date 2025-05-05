@@ -4,7 +4,6 @@ import com.threadvine.dto.OrderDTO;
 import com.threadvine.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender javaMailSender;
 
     public void sendEmail(OrderDTO orderDTO) {
 
