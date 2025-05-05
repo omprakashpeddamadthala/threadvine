@@ -31,19 +31,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         String token = this.extractToken(request);
         String username = token != null ? authenticationService.extractUsername(token) : null;
-        UserDetails userDetails = this.authenticationService.loadUserByUsername(username);
-        if (token != null && authenticationService.validateToken(token, userDetails)) {
-            log.info( "JWT token is valid" );
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+        if (username != null) {
+            UserDetails userDetails = this.authenticationService.loadUserByUsername(username);
+            if (token != null && authenticationService.validateToken(token, userDetails)) {
+                log.info( "JWT token is valid" );
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
         filterChain.doFilter(request, response);
     }
 
     private boolean shouldSkipFilter(HttpServletRequest request) {
         log.info( "Checking if JWT authentication filter should be skipped");
-        return request.getServletPath().endsWith("/login") || request.getServletPath().endsWith("/register");
+        String path = request.getServletPath();
+        return path.endsWith("/login") || 
+               path.endsWith("/register") || 
+               path.contains("/swagger-ui/") || 
+               path.contains("/v3/api-docs/");
     }
 
     private String extractToken(HttpServletRequest request) {
