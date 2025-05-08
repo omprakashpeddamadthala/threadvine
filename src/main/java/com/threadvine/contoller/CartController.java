@@ -42,6 +42,7 @@ public class CartController {
     })
     @PostMapping("/add")
     @PreAuthorize( "isAuthenticated()" )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<CartDTO> addToCart(
             @Parameter(description = "Authenticated user details", hidden = true)
             @AuthenticationPrincipal UserDetails userDetails,
