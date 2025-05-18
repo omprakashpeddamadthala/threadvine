@@ -1,6 +1,8 @@
 package com.threadvine.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.math.BigDecimal;

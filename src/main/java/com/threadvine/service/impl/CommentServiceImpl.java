@@ -12,7 +12,6 @@ import com.threadvine.repositories.UserRepository;
 import com.threadvine.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

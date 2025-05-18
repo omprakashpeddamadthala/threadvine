@@ -20,10 +20,12 @@ public interface OrderMapper {
     @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserIdToUser")
     Order toEntity(OrderDTO orderDTO);
 
-    @Mapping( target = "productId" , source = "product.id")
+    @Mapping(target = "productId", source = "product.id")
+    @Mapping(target = "orderId", source = "order.id")
     OrderItemDTO toOrderItemDto(OrderItem orderItem);
 
     @Mapping(target = "product", source = "productId", qualifiedByName = "mapProductIdToProduct")
+    @Mapping(target = "order", source = "orderId", qualifiedByName = "mapOrderIdToOrder")
     OrderItem toOrderItemEntity(OrderItemDTO orderItemDTO);
 
     List<OrderItemDTO> toOrderItemDTOs(List<OrderItem> orderItems);
@@ -47,6 +49,14 @@ public interface OrderMapper {
         Product product = new Product();
         product.setId(productId);
         return product;
+    }
+
+    // Custom mapping for orderId to Order object
+    @Named("mapOrderIdToOrder")
+    default Order mapOrderIdToOrder(UUID orderId) {
+        Order order = new Order();
+        order.setId(orderId);
+        return order;
     }
 
     @AfterMapping

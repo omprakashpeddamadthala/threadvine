@@ -3,7 +3,6 @@ package com.threadvine.repositories;
 import com.threadvine.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
 import java.io.Serializable;
 import java.util.Optional;
 

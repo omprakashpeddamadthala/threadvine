@@ -1,6 +1,9 @@
 package com.threadvine.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;

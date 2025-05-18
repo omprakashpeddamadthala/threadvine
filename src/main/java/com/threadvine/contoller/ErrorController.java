@@ -6,6 +6,7 @@ import com.threadvine.exceptions.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,17 @@ public class ErrorController {
                 .message("An unexpected error occurred")
                 .build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error("Exception occurred", e);
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message("You don't have access to this API")
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
