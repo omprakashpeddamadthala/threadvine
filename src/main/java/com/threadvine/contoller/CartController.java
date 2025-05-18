@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,13 +33,6 @@ public class CartController {
     private final CartService cartService;
 
     @Operation(summary = "Add product to cart", description = "Adds a product to the authenticated user's shopping cart")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Product successfully added to cart",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input parameters", content = @Content),
-        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
-    })
     @PostMapping("/add")
     @PreAuthorize( "isAuthenticated()" )
     @SecurityRequirement(name = "bearerAuth")
@@ -57,12 +50,6 @@ public class CartController {
     }
 
     @Operation(summary = "Get user's cart", description = "Retrieves the authenticated user's shopping cart")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Cart retrieved successfully",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class))),
-        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Cart not found", content = @Content)
-    })
     @GetMapping
     @PreAuthorize( "isAuthenticated()" )
     public ResponseEntity<CartDTO> getCart(
@@ -75,11 +62,6 @@ public class CartController {
     }
 
     @Operation(summary = "Clear user's cart", description = "Removes all items from the authenticated user's shopping cart")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Cart cleared successfully", content = @Content),
-        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Cart not found", content = @Content)
-    })
     @DeleteMapping
     @PreAuthorize( "isAuthenticated()" )
     public ResponseEntity<?> clearCart(

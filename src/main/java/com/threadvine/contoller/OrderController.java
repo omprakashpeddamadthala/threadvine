@@ -1,7 +1,7 @@
 package com.threadvine.contoller;
 
 import com.threadvine.dto.OrderDTO;
-import com.threadvine.dto.ProductDTO;
+import com.threadvine.model.Order;
 import com.threadvine.model.User;
 import com.threadvine.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,18 +12,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -55,5 +53,62 @@ public class OrderController {
         UUID userId = ((User) userDetails).getId();
         OrderDTO dto = orderService.createOrder( userId ,address,phoneNumber );
         return new ResponseEntity<>( dto, HttpStatus.CREATED );
+    }
+
+    @Operation(summary = "Retrieve all orders ", description = "Retrieve all orders")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Retrieved all orders successfully ",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN or SELLER role", content = @Content)
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SELLER')")
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> getAllOrders(){
+        log.info( "Received GET  request for get all Orders");
+        List<OrderDTO> allOrders = orderService.getAllOrders();
+        return new ResponseEntity<>( allOrders,HttpStatus.OK );
+    }
+
+    @Operation(summary = "Retrieve order by order id  ", description = "Retrieve order by order id  ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Retrieved  order successfully ",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - requires USER role", content = @Content)
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize( "isAuthenticated()" )
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> getOrderByOrderId(@PathVariable UUID orderId){
+        log.info( "Received GET  request for get order details by {} ",orderId );
+        OrderDTO dto  = orderService.getOrderByOrderId(orderId);
+        return new ResponseEntity<>( dto, HttpStatus.OK );
+    }
+
+
+    @Operation(summary = "Retrieve logged in user orders ", description = "Retrieve logged in user orders")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize( "isAuthenticated()" )
+    @GetMapping("/user")
+    public ResponseEntity<List<OrderDTO>> getUserOrders(@AuthenticationPrincipal UserDetails userDetails){
+        log.info( "Received GET  request for get current logged in user orders" );
+        UUID userId = ((User) userDetails).getId();
+        List<OrderDTO> orderDTOS = orderService.getUserOrders(userId);
+        return new ResponseEntity<>( orderDTOS,HttpStatus.OK );
+    }
+
+
+    @Operation(summary = "Update order status  ", description = "Update order status" )
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{orderId}/status")
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable UUID orderId, @RequestParam Order.OrderStatus status){
+        log.info( "Received PUT request for update status {} ",status );
+        OrderDTO updatedOrder = orderService.updateOrderStatus(orderId,status);
+        return new ResponseEntity<>( updatedOrder,HttpStatus.OK );
     }
 }

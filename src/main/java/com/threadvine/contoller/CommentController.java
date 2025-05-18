@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,13 +34,6 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(summary = "Add a comment to a product", description = "Creates a new comment for a specific product")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Comment successfully created",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
-    })
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/product/{productId}")
     @PreAuthorize( "isAuthenticated()" )
@@ -58,12 +51,6 @@ public class CommentController {
     }
 
     @Operation(summary = "Get comments for a product", description = "Retrieves all comments for a specific product")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Comments retrieved successfully",
-                content = @Content(mediaType = "application/json", 
-                schema = @Schema(implementation = CommentDTO.class, type = "array"))),
-        @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
-    })
     @GetMapping("/product/{productId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByProductId(
             @Parameter(description = "ID of the product to get comments for", required = true)
