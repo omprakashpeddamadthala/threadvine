@@ -91,13 +91,6 @@ public class OrderController {
 
 
     @Operation(summary = "Retrieve logged in user orders ", description = "Retrieve logged in user orders")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Retrieved logged in user orders successfully ",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - requires USER role", content = @Content)
-    })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize( "isAuthenticated()" )
     @GetMapping("/user")
@@ -110,13 +103,6 @@ public class OrderController {
 
 
     @Operation(summary = "Update order status  ", description = "Update order status" )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Update order status  successfully ",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN role", content = @Content)
-    })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{orderId}/status")

@@ -45,12 +45,6 @@ public class AuthController {
     private final TokenBlackListService tokenBlackListService;
 
     @Operation(summary = "Authenticate a user", description = "Authenticates a user with email and password and returns a JWT token")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully authenticated",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))),
-        @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
-    })
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @Parameter(description = "Login credentials", required = true)
@@ -66,12 +60,6 @@ public class AuthController {
     }
 
     @Operation(summary = "Register a new user", description = "Creates a new user account with the provided details")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "User successfully registered", 
-                content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "400", description = "Invalid input or email already in use", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
-    })
     @PostMapping("/register")
     public ResponseEntity<String> register(
             @Parameter(description = "User registration details", required = true)
@@ -82,13 +70,6 @@ public class AuthController {
     }
 
     @Operation(summary = "Change user password", description = "Changes the password for the authenticated user")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Password successfully changed", 
-                content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
-    })
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
             @Parameter(description = "Password change details", required = true)
@@ -102,12 +83,6 @@ public class AuthController {
 
 
     @Operation(summary = "Logout user", description = "Invalidates the user's JWT token by adding it to a blacklist")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully logged out", 
-                content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "400", description = "No valid token provided", 
-                content = @Content(mediaType = "text/plain", schema = @Schema(type = "string")))
-    })
     @PostMapping("/logout")
     public ResponseEntity<String> logout(
             @Parameter(description = "Request with Authorization header containing JWT token", required = true)
@@ -123,11 +98,6 @@ public class AuthController {
     }
 
     @Operation(summary = "Refresh JWT token", description = "Generates a new JWT token using the current valid token")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Token successfully refreshed",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))),
-        @ApiResponse(responseCode = "401", description = "Unauthorized - invalid or expired token", content = @Content)
-    })
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthResponse> refreshToken(
             @Parameter(description = "Request with Authorization header containing JWT token", required = true)
