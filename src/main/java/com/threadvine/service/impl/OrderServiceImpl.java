@@ -96,8 +96,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO updateOrderStatus(UUID orderId, Order.OrderStatus status) {
         log.info( "Update order status for this orderId {} and  status {}", orderId, status );
-        OrderDTO orderDTO = this.getOrderByOrderId( orderId );
-        Order order = orderMapper.toEntity( orderDTO );
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
         order.setStatus( status );
         Order savedOrder =  orderRepository.save( order );
         return orderMapper.toDto( savedOrder );
