@@ -5,6 +5,7 @@ import com.threadvine.io.AuthResponse;
 import com.threadvine.io.ChangePasswordRequest;
 import com.threadvine.io.LoginRequest;
 import com.threadvine.model.User;
+import com.threadvine.records.RegisterRequest;
 import com.threadvine.service.AuthenticationService;
 import com.threadvine.service.TokenBlackListService;
 import com.threadvine.service.UserService;
@@ -63,9 +64,9 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(
             @Parameter(description = "User registration details", required = true)
-            @Valid @RequestBody User user) {
-        log.info("Received registration request for user: {}", user.getEmail());
-        User registeredUser = userService.registerUser( user );
+            @Valid @RequestBody RegisterRequest registerRequest) {
+        log.info("Received registration request for user: {}", registerRequest.email());
+        User registeredUser = userService.registerUser( registerRequest );
         return ResponseEntity.ok("User registered successfully with email: " + registeredUser.getEmail() );
     }
 
