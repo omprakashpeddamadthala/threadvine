@@ -62,7 +62,7 @@ public class CartServiceImpl implements CartService {
         }
 
         Cart savedCart = cartRepository.save( cart );
-        log.info( "Product added to cart: {}", savedCart.getItems() );
+        log.info( "Product added to cart: {}", savedCart.getId() );
         return cartMapper.toDto( savedCart );
     }
 
