@@ -1,8 +1,8 @@
 ## Upcoming Task
 
-- [] Set Up Dev and Prod Profiles 🖥️         
-- [] Dockerize the Application 🐳
-- [] Integrate SonarQube 📊
-- [] Set Up Jenkins Pipeline ⚙️
-- [] Develop Email Management API 📧
-- [] Develop Order Rules Management API 📋
+- [x] Set Up Dev and Prod Profiles 🖥️         
+- [x] Dockerize the Application 🐳
+- [x] Integrate SonarQube 📊
+- [x] Set Up Jenkins Pipeline ⚙️
+- [x] Develop Email Management API 📧
+- [x] Develop Order Rules Management API 📋
