@@ -32,7 +32,11 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         // Default to a valid role
-        if (!isValidRole( registerRequest.role().name())) user.setRole( User.Role.USER);
+        if (!isValidRole( registerRequest.role().name())){
+            user.setRole( User.Role.USER);
+        }else{
+            user.setRole( registerRequest.role());
+        }
 
         user.setPassword(passwordEncoder.encode(registerRequest.password()));
         return userRepository.save(user);
