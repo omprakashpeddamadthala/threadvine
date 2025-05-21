@@ -3,6 +3,7 @@ package com.threadvine.service.impl;
 import com.threadvine.exceptions.UserNotFoundException;
 import com.threadvine.io.ChangePasswordRequest;
 import com.threadvine.model.User;
+import com.threadvine.records.RegisterRequest;
 import com.threadvine.repositories.UserRepository;
 import com.threadvine.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +21,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
-        log.info( "Registering user: {}", user.getEmail());
-        if(userRepository.findByEmail( user.getEmail() ).isPresent()){
-            throw new IllegalArgumentException("User already exists with email: " + user.getEmail());
+    public User registerUser(RegisterRequest registerRequest) {
+        log.info( "Registering user: {}", registerRequest.email());
+        if(userRepository.findByEmail( registerRequest.email() ).isPresent()){
+            throw new IllegalArgumentException("User already exists with email: " +  registerRequest.email());
         }
 
-        // Default to a valid role
-        if (!isValidRole(user.getRole().name())) user.setRole( User.Role.USER);
+        User user = User.builder()
+                .email( registerRequest.email() )
+                .build();
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Default to a valid role
+        if (!isValidRole( registerRequest.role().name())) user.setRole( User.Role.USER);
+
+        user.setPassword(passwordEncoder.encode(registerRequest.password()));
         return userRepository.save(user);
     }
 
