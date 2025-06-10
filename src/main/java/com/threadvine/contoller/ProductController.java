@@ -36,7 +36,7 @@ public class ProductController {
     @Operation(summary = "Create a new product", description = "Creates a new product with optional image upload")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN','SELLER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SELLER')")
     public ResponseEntity<ProductDTO> createProduct(
             @Parameter(description = "Product details", required = true)
             @RequestPart("product") @Valid ProductDTO productDTO,

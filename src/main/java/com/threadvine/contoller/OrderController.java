@@ -34,13 +34,6 @@ public class OrderController {
     private final OrderService orderService;
 
     @Operation(summary = "Create a new order ", description = "Creates a new order")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Order successfully placed",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - requires USER role", content = @Content)
-    })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize( "isAuthenticated()" )
     @PostMapping
@@ -56,13 +49,6 @@ public class OrderController {
     }
 
     @Operation(summary = "Retrieve all orders ", description = "Retrieve all orders")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Retrieved all orders successfully ",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN or SELLER role", content = @Content)
-    })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SELLER')")
     @GetMapping
@@ -73,13 +59,6 @@ public class OrderController {
     }
 
     @Operation(summary = "Retrieve order by order id  ", description = "Retrieve order by order id  ")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Retrieved  order successfully ",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - requires USER role", content = @Content)
-    })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize( "isAuthenticated()" )
     @GetMapping("/{orderId}")
