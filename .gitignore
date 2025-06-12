@@ -32,5 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
-###External Tools###
-.env/
+### Environment ###
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Environment variables file
+*.env

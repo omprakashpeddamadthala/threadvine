@@ -20,3 +20,13 @@ server:
 jwt:
   secret: secret123345456ioedhfoshdfowisfosidfioshdfiushdfiusdjufhsdihfisduhfiusdhfuihsdifuhsidhfisudhfish
   expiration: 86400000L
+
+# SendGrid Configuration
+sendgrid:
+  api:
+    key: ${SENDGRID_API_KEY}
+  from:
+    email: ${SENDGRID_FROM_EMAIL}
+    name: ThreadVine Support
+admin:
+  email: prakashornold@gmail.com
