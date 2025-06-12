@@ -64,8 +64,10 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save( order );
         cartService.clearCart( user.getId() );
 
-        //send email when order is created
-        return orderMapper.toDto( savedOrder );
+        OrderDTO orderDto = orderMapper.toDto( savedOrder );
+        emailService.sendOrderConfirmationEmail( orderDto );
+
+        return orderDto;
     }
 
     @Override
